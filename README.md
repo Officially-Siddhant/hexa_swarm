@@ -17,7 +17,7 @@ The `px4_swarm_controller` package was ported for ROS 2 Foxy using Gazebo Classi
 | `WeightedTopologyNeighbors.hpp` | Replaced invalid Eigen type with `Eigen::Matrix<std::size_t, Eigen::Dynamic, 1>` |
 | `WeightedTopologyController.hpp` | Replaced `Eigen::Vector<float, 6>` with `Eigen::Matrix<float, 6, 1>` for `PoseTwist` |
 | `WeightedTopologyNeighbors.cpp` | Fixed broken size comparison using comma operator → replaced with logical `&&` |
-| `WeightedTopologyController.cpp` | 
+| `simulation_node.py` | setting GAZEBO_PLUGIN_PATH and GAZEBO_MODEL_PATH within the gnome-terminal commands.|
 - Added default value to `gains` parameter  
 - Replaced invalid `PoseTwist` constructor with `<<` operator  
 - Manually reshaped 6×1 vector into 2×3 matrix instead of using unsupported `.reshaped()`  
