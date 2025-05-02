@@ -8,7 +8,7 @@
  *
  * It extends the SwarmController class to implement specific behavior for the weighted topology scenario.
  *
- * @author Arthur Astier - Modified for ROS2 Foxy by Siddhant Baroth
+ * @author Arthur Astier - Modified for ROS2 Fozy by Siddhant Baroth, 2025.
  */
 
 #include "SwarmControllers/WeightedTopology/WeightedTopologyController.hpp"
@@ -22,7 +22,7 @@ Controller::WeightedTopologyController::WeightedTopologyController() : SwarmCont
     this->declare_parameter<std::vector<double>>("gains", std::vector<double>{1.0});
 
     const auto gains{this->get_parameter("gains").as_double_array()};
-    if (std::size(gains)!=9){
+    if (gains.size()!=9){
         RCLCPP_INFO(this->get_logger(),"You didn't provide Kp, Ki, Kd for each PID (9 gains to provide)");
     }else{
         pid_ax.setKp(gains[0]);
@@ -47,7 +47,7 @@ void Controller::WeightedTopologyController::neighbors_to_matrix(
         const WeightedTopologyController::WeightedTopologyNeighbors &neighbors) {
     const auto neighbors_position{neighbors.neighbors_position};
     const auto weights{neighbors.weights};
-    neighborhood = Neighborhood::Zero(6, std::size(neighbors_position));
+    neighborhood = Neighborhood::Zero(6, neighbors_position.size());
 
     std::for_each(std::begin(neighbors_position), std::end(neighbors_position),
                   [&, idx = 0u](const auto &position) mutable {
@@ -66,7 +66,7 @@ void Controller::WeightedTopologyController::neighbors_to_matrix(
  * @param neighbors Pointer to the received neighbor data.
  */
 void Controller::WeightedTopologyController::neighbors_callback(const WeightedTopologyNeighbors::SharedPtr &neighbors) {
-    if (!std::empty(neighbors->neighbors_position)) {
+    if (!neighbors->neighbors_position.empty()) {
         is_neighborhood_empty = false;
         const auto vect_neighborhood{*neighbors};
         neighbors_to_matrix(vect_neighborhood);
@@ -110,7 +110,7 @@ void Controller::WeightedTopologyController::compute_command(TrajectorySetpoint 
     //  [x_dot, y_dot, z_dot]] for summing column-wise control input
     Eigen::Matrix<float, 2, 3> reshaped;
     reshaped << RPVVs(0), RPVVs(2), RPVVs(4),  // x, y, z
-                RPVVs(1), RPVVs(3), RPVVs(5);  // ẋ, ẏ, ż
+                RPVVs(1), RPVVs(3), RPVVs(5);  // ẋ, ẏ, ż
 
     const Eigen::RowVector3f command = -reshaped.colwise().sum();
 
