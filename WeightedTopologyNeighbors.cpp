@@ -2,7 +2,7 @@
  * @brief WeightedTopologyNeighbors class for calculating weighted topology neighbors based on vehicle positions.
  * @details This class extends the NearestNeighbors class template to calculate weighted topology neighbors.
  * It provides functionality to process neighbor positions, enrich neighborhoods, and handle weighted topology neighbors.
- * @author Arthur Astier
+ * @author Arthur Astier - Modified for ROS2 Fozy by Siddhant Baroth, 2025.
  */
 
 #include "SwarmControllers/WeightedTopology/WeightedTopologyNeighbors.hpp"
@@ -92,7 +92,7 @@ void Neighborhood::WeightedTopologyNeighbors::process_neighbor_position(const st
  */
 void Neighborhood::WeightedTopologyNeighbors::process_neighborhood(const std::size_t drone_idx,
                                                                    WeightedTopologyNeighborsMsg &neighborhood) {
-    if (!std::empty(neighborhood.neighbors_position)) {
+    if (!neighborhood.neighbors_position.empty()){
         if (leaders[drone_idx]) {
             prcs[drone_idx] = 1;
         } else {
