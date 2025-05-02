@@ -22,3 +22,15 @@ The `px4_swarm_controller` package was ported for ROS 2 Foxy using Gazebo Classi
 - Replaced invalid `PoseTwist` constructor with `<<` operator  
 - Manually reshaped 6×1 vector into 2×3 matrix instead of using unsupported `.reshaped()`  
 - Added defaults for: `leaders`, `x_formation`, `y_formation`, `z_formation` 
+
+
+## Specific changes made in the second iteration for C++14 compatibility
+As absurd as it may seem, I had to deprecate compatibility of syntax to function with ROS2 Foxy. In my defence, at the time of release, Ignition Gazebo migration is extremely code intensive. Hence, the downgrade was easier.
+
+| File | Change |
+|------|--------|
+| `ChangeWaypoint.cpp` | Replaced `std::size(...)` → `.size()` and `std::hypot(...)` → `std::sqrt(std::pow(...))` |
+| `WeightedTopologyController.cpp` | Replaced `std::size(...)` → `.size()` on `gains` and `neighbors_position` |
+| `WeightedTopologyNeighbors.cpp` | Replaced `std::empty(...)` → `.empty()` on vectors |
+| `NearestNeighbors.hpp` | Replaced 3D `std::hypot(...)` → manual Euclidean norm with `std::sqrt(...)` |
+| `PID.hpp` | Replaced `std::is_floating_point_v<T>` with `std::is_floating_point<T>::value` + compatible `enable_if` |
