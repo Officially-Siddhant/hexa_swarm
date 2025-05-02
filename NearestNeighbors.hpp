@@ -2,7 +2,7 @@
  * @brief NearestNeighbors class template for finding nearest neighbors based on vehicle positions.
  * @details This class template provides functionality to find nearest neighbors among a group of vehicles based on their positions.
  * @tparam Neighbors Type representing the neighbors.
- * @author Arthur Astier
+ * @author Arthur Astier - modified by Siddhant Baroth.
  */
 #pragma once
 
