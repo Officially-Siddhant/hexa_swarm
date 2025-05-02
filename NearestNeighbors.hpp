@@ -2,7 +2,7 @@
  * @brief NearestNeighbors class template for finding nearest neighbors based on vehicle positions.
  * @details This class template provides functionality to find nearest neighbors among a group of vehicles based on their positions.
  * @tparam Neighbors Type representing the neighbors.
- * @author Arthur Astier - Modified for ROS2 Foxy by Siddhant Baroth.
+ * @author Arthur Astier - modified by Siddhant Baroth.
  */
 #pragma once
 
@@ -77,7 +77,7 @@ namespace Neighborhood {
                 if (all_position_received) {
                     std::transform(position_received.cbegin(), position_received.cend(),
                                    position_received.begin(), // write to the same location
-                                   [](const bool is_received) { return false; });
+                                   []([[maybe_unused]]const bool is_received) { return false; });
 
                     find_neighbors();
                 }
@@ -176,8 +176,8 @@ namespace Neighborhood {
          * @param neighbor_position The position of the neighbor.
          * @param neighborhood The neighborhood to be enriched.
          */
-        virtual void process_neighbor_position(const std::size_t drone_idx, const std::size_t neighbor_idx,
-                                               const VehicleLocalPosition &position,
+        virtual void process_neighbor_position([[maybe_unused]] const std::size_t drone_idx, [[maybe_unused]] const std::size_t neighbor_idx,
+                                               [[maybe_unused]] const VehicleLocalPosition &position,
                                                VehicleLocalPosition neighbor_position,
                                                Neighbors &neighborhood) {
             // Default implementation proposed (in fact we are sure that the neighbors_attribute exists).
@@ -189,13 +189,13 @@ namespace Neighborhood {
          * @param drone_idx The index of the drone.
          * @param neighborhood The neighborhood to be processed.
          */
-        virtual void process_neighborhood(const std::size_t drone_idx, Neighbors &neighborhood) {};
+        virtual void process_neighborhood([[maybe_unused]] const std::size_t drone_idx,[[maybe_unused]] Neighbors &neighborhood) {};
 
         /**
          * @brief Enrich the neighborhood with additional information.
          * @param neighborhood The neighborhood to be enriched.
          */
-        virtual void enrich_neighborhood(Neighbors &neighborhood) {};
+         virtual void enrich_neighborhood(Neighbors & /*neighborhood*/) {};
 
     private:
         /**
