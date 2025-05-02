@@ -2,7 +2,7 @@
  * @brief NearestNeighbors class template for finding nearest neighbors based on vehicle positions.
  * @details This class template provides functionality to find nearest neighbors among a group of vehicles based on their positions.
  * @tparam Neighbors Type representing the neighbors.
- * @author Arthur Astier - modified by Siddhant Baroth.
+ * @author Arthur Astier - Modified for ROS2 Foxy by Siddhant Baroth.
  */
 #pragma once
 
@@ -135,7 +135,7 @@ namespace Neighborhood {
             std::for_each(std::begin(neighborhoods), std::end(neighborhoods),
                           [this, drone_idx = 0u](auto &neighborhood) mutable {
                               // This condition is generic because we are checking in the traits that the Neighbors type defines at least a neighbors_position attribute
-                              if (!std::empty(neighborhood.neighbors_position)) {
+                              if (!neighborhood.neighbors_position.empty()) {
                                   enrich_neighborhood(neighborhood);
                                   this->neighbors_publishers[drone_idx]->publish(neighborhood);
                               }
@@ -207,7 +207,9 @@ namespace Neighborhood {
          */
         static bool
         is_neighbor(const VehicleLocalPosition &lhs, const VehicleLocalPosition &rhs, const double distance) {
-            const auto drone_distance{std::hypot(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z)};
+            const auto drone_distance = std::sqrt(std::pow(lhs.x - rhs.x, 2) +
+            std::pow(lhs.y - rhs.y, 2) +
+            std::pow(lhs.z - rhs.z, 2));
             // The search of neighbors is not really well done yet so you can have the same position in lhs and rhs.
             return ((drone_distance <= distance) && (drone_distance >= 1e-2));
         };
